@@ -13,12 +13,13 @@ class ShortenedUrl < ActiveRecord::Base
     foreign_key: :short_url_id,
     class_name: "Visit"
 
-  has_many :visitors, #problem
+  has_many :visitors,
+    Proc.new {distinct},
     :through => :visits,
-    :source => :visitors
+    :source => :visitor
 
-  validates :short_url, :presence => true
-  validates :long_url, :uniqueness => true
+  validates :short_url, :presence => true, :uniqueness => true
+  validates :long_url, :presence => true
   validates :submitter_id, :presence => true
 
   def self.random_code
@@ -40,7 +41,7 @@ class ShortenedUrl < ActiveRecord::Base
   end
 
   def num_uniques
-    visitors.distinct.count
+    visitors.count
   end
 
   def num_recent_uniques

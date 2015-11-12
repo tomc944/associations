@@ -3,12 +3,12 @@ class Visit < ActiveRecord::Base
   validates :short_url_id, :presence => true
   validates :visitor_id, :presence => true
 
-  belongs_to :visitors,
+  belongs_to :visitor,
     primary_key: :id,
     foreign_key: :visitor_id,
     class_name: "User"
 
-  belongs_to :visited_urls,
+  belongs_to :visited_url,
     primary_key: :id,
     foreign_key: :short_url_id,
     class_name: "ShortenedUrl"

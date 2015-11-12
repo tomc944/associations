@@ -10,7 +10,8 @@ class User < ActiveRecord::Base
     foreign_key: :visitor_id,
     class_name: "Visit"
 
-  has_many :visited_urls, #problem
+  has_many :visited_urls,
+    Proc.new {distinct},
     :through => :visits,
     :source => :visited_url
 
