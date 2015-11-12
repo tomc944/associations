@@ -8,6 +8,15 @@ class ShortenedUrl < ActiveRecord::Base
     foreign_key: :submitter_id,
     class_name: "User"
 
+  has_many :visits,
+    primary_key: :id,
+    foreign_key: :short_url_id,
+    class_name: "Visit"
+
+  has_many :visitors, #problem
+    :through => :visits,
+    :source => :visitors
+
   validates :short_url, :presence => true
   validates :long_url, :uniqueness => true
   validates :submitter_id, :presence => true
@@ -26,5 +35,18 @@ class ShortenedUrl < ActiveRecord::Base
     create!(submitter_id: user.id, long_url: long_url, short_url: random_code)
   end
 
+  def num_clicks
+    visits.count
+  end
+
+  def num_uniques
+    visitors.distinct.count
+  end
+
+  def num_recent_uniques
+    recent = Time.now
+    ten_min_ago = recent - 600
+    visits.where(:created_at => (ten_min_ago..recent)).count
+  end
 
 end
