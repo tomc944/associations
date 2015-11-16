@@ -14,9 +14,9 @@ class ShortenedUrl < ActiveRecord::Base
     class_name: "Visit"
 
   has_many :visitors,
-    Proc.new {distinct},
-    :through => :visits,
-    :source => :visitor
+    Proc.new { distinct },
+    through: :visits,
+    source: :visitor
 
   validates :short_url, :presence => true, :uniqueness => true
   validates :long_url, :presence => true
